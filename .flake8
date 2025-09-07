@@ -1,0 +1,15 @@
+[flake8]
+# Allow longer lines for readability
+max-line-length = 120
+
+# Ignore non-critical folders
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    .github
+
+# Ignore specific rules handled by black or unnecessary warnings
+extend-ignore =
+    E203,  # whitespace before ':'
+    W503   # line break before binary operator
