@@ -1,8 +1,6 @@
 from fastapi import FastAPI
-from dotenv import load_dotenv
-import os
+from app.settings import settings
 
-load_dotenv(override=True)  # force-read .env
 app = FastAPI()
 
 @app.get("/")
@@ -15,7 +13,15 @@ def health():
 
 @app.get("/config")
 def config():
+    return {"env": settings.ENV, "api_key_set": settings.API_KEY is not None}
+
+@app.get("/settings")
+def get_settings():
+    masked = None
+    if settings.API_KEY:
+        masked = f"{settings.API_KEY[:4]}***{len(settings.API_KEY)}"
     return {
-        "env": os.getenv("ENV", "dev"),
-        "api_key_set": bool(os.getenv("API_KEY")),
+        "env": settings.ENV,
+        "api_key_present": settings.API_KEY is not None,
+        "api_key_masked": masked,
     }
